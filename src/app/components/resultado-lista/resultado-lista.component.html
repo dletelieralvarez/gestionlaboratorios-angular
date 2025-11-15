@@ -1,0 +1,13 @@
+<article class="panel">
+  <h2 class="section-title">Listado de Resultados</h2>
+
+  <ul *ngIf="resultados.length > 0; else sinResultados">
+    <li *ngFor="let resultado of resultados">
+      {{ resultado.id }} - {{ resultado.tipo }}
+    </li>
+  </ul>
+
+  <ng-template #sinResultados>
+    <p>No hay resultados para mostrar.</p>
+  </ng-template>
+</article>

@@ -1,0 +1,13 @@
+<article class="panel">
+  <h2 class="section-title">Listado de Roles</h2>
+
+  <ul *ngIf="roles.length > 0; else sinRoles">
+    <li *ngFor="let rol of roles">
+      {{ rol.id }} - {{ rol.nombreRol }}
+    </li>
+  </ul>
+
+  <ng-template #sinRoles>
+    <p>No hay roles para mostrar.</p>
+  </ng-template>
+</article>

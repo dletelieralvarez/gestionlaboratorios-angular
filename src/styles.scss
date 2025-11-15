@@ -1,1 +1,297 @@
-/* You can add global styles to this file, and also import other style files */
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Montserrat:wght@600;700&display=swap');
+
+:root {
+  --primary: #1ab6b8;
+  --primary-dark: #00949a;
+  --accent: #f6a623;
+  --text-main: #333333;
+  --text-muted: #8a8fa3;
+  --bg-body: #f4f6fb;
+  --bg-card: #ffffff;
+  --border-soft: #e2e6f0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Open Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text-main);
+  background: var(--bg-body);
+}
+
+/* Links */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Layouts comunes */
+.page-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ================= HEADER ================= */
+
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 3rem;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.logo-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.logo-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.main-nav a {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  padding-bottom: 0.15rem;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+  color: var(--primary-dark);
+  border-color: var(--primary);
+}
+
+/* ================= CONTENIDO PRINCIPAL ================= */
+
+.main-content {
+  padding-top: 90px; 
+  padding-bottom: 3rem;
+  min-height: calc(100vh - 130px);
+}
+
+.hero {
+  @extend .page-container;
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.2fr);
+  gap: 3rem;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.hero-text h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 2.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero-text p {
+  color: var(--text-muted);
+  font-size: 0.98rem;
+  margin-bottom: 1.5rem;
+  max-width: 480px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.6rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.btn-primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(0, 151, 167, 0.3);
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+}
+
+.btn-outline {
+  background: transparent;
+  border-color: var(--primary);
+  color: var(--primary-dark);
+}
+
+.btn-outline:hover {
+  background: rgba(26, 182, 184, 0.06);
+}
+
+.hero-card {
+  background: var(--bg-card);
+  border-radius: 1rem;
+  padding: 1.5rem 1.75rem;
+  box-shadow: 0 18px 40px rgba(15, 35, 52, 0.08);
+  border: 1px solid var(--border-soft);
+}
+
+.hero-card h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.hero-card li {
+  font-size: 0.9rem;
+  padding: 0.25rem 0;
+  color: var(--text-muted);
+}
+
+/* ================= SECCIONES DE LISTAS ================= */
+
+.grid-2 {
+  @extend .page-container;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 2rem;
+}
+
+.panel {
+  background: var(--bg-card);
+  border-radius: 1rem;
+  padding: 1.6rem 1.8rem;
+  box-shadow: 0 12px 30px rgba(15, 35, 52, 0.06);
+  border: 1px solid var(--border-soft);
+}
+
+.section-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.panel ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.panel li {
+  padding: 0.35rem 0;
+  border-bottom: 1px solid #f1f2f7;
+  font-size: 0.95rem;
+}
+
+.panel li:last-child {
+  border-bottom: none;
+}
+
+/* ================= FOOTER ================= */
+
+.main-footer {
+  border-top: 1px solid var(--border-soft);
+  background: #ffffff;
+  padding: 0.9rem 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.footer-links a:hover {
+  color: var(--primary-dark);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+  .main-header {
+    padding: 0 1.5rem;
+  }
+
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .grid-2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
