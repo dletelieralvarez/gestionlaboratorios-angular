@@ -1,0 +1,51 @@
+<article class="panel">
+  <h2 class="section-title">{{ titulo }}</h2>
+
+  <form [formGroup]="form" (ngSubmit)="guardar()">
+
+    <div class="form-row">
+      <label>Usuario ID</label>
+      <input type="number" formControlName="usuarioId" />
+    </div>
+
+    <div class="form-row">
+      <label>Tipo de análisis</label>
+      <input type="text" formControlName="tipo" />
+    </div>
+
+    <div class="form-row">
+      <label>ID Laboratorio</label>
+      <input type="number" formControlName="idLaboratorio" />
+    </div>
+
+    <div class="form-row">
+      <label>Valores</label>
+      <textarea formControlName="valores"></textarea>
+    </div>
+
+    <div class="form-row">
+      <label>Fecha muestra</label>
+      <input type="date" formControlName="fechaMuestra" />
+    </div>
+
+    <div class="form-row">
+      <label>Fecha resultado</label>
+      <input type="date" formControlName="fechaResultado" />
+    </div>
+
+    <div class="form-row">
+      <label>Estado</label>
+      <input type="text" formControlName="estado" />
+    </div>
+
+    <div class="buttons">
+      <button type="submit" [disabled]="form.invalid">
+        {{ id ? 'Actualizar' : 'Guardar' }}
+      </button>
+
+      <button type="button" (click)="volverALaLista()">
+        Cancelar
+      </button>
+    </div>
+  </form>
+</article>

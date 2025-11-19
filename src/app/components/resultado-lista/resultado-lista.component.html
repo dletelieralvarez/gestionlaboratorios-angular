@@ -1,13 +1,43 @@
 <article class="panel">
   <h2 class="section-title">Listado de Resultados</h2>
 
-  <ul *ngIf="resultados.length > 0; else sinResultados">
-    <li *ngFor="let resultado of resultados">
-      {{ resultado.id }} - {{ resultado.tipo }}
-    </li>
-  </ul>
+  <button class="btn btn-primary" (click)="nuevoResultado()">➕ Nuevo Resultado</button>
+
+  <table *ngIf="resultados.length > 0; else sinResultados" class="tabla-resultados">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Usuario</th>
+        <th>Tipo Análisis</th>
+        <th>Laboratorio</th>
+        <th>Valores</th>
+        <th>Fecha Muestra</th>
+        <th>Fecha Resultado</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let r of resultados">
+        <td>{{ r.id }}</td>
+        <td>{{ r.usuarioId }}</td>
+        <td>{{ r.tipo }}</td>
+        <td>{{ r.idLaboratorio }}</td>
+        <td>{{ r.valores }}</td>
+        <td>{{ r.fechaMuestra | date:'dd/MM/yyyy' }}</td>
+        <td>{{ r.fechaResultado | date:'dd/MM/yyyy' }}</td>
+        <td>{{ r.estado }}</td>
+
+        <td>
+          <button class="btn btn-sm btn-warning" (click)="editarResultado(r.id!)">✏ Editar</button>
+          <button class="btn btn-sm btn-danger" (click)="eliminarResultado(r.id!)">🗑 Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
   <ng-template #sinResultados>
-    <p>No hay resultados para mostrar.</p>
+    <p>No hay resultados disponibles.</p>
   </ng-template>
 </article>

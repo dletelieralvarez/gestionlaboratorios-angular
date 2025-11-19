@@ -31,9 +31,9 @@ export class resultadoService{
         );
     }
 
-    actualizarResultado(id: number): Observable<string>{
-            return this.http.delete<ApiResponse<string>>(`${this.apiUrl}/${id}`).pipe(
-            map(resp=> resp.data)
+    actualizarResultado(id: number, resultado: Resultado): Observable<Resultado>{
+            return this.http.put<ApiResponse<Resultado[]>>(`${this.apiUrl}/${id}`, resultado).pipe(
+            map(resp => resp.data[0])
         );
     }
 
