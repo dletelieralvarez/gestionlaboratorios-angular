@@ -1,0 +1,21 @@
+<section class="carousel">
+  <div class="carousel-inner">
+    <img
+      [src]="imagenes[indiceActual]"
+      alt="Imagen médica"
+      class="carousel-img"
+    />
+
+    <button class="carousel-btn prev" (click)="anterior()">&#10094;</button>
+    <button class="carousel-btn next" (click)="siguiente()">&#10095;</button>
+  </div>
+
+  <div class="carousel-dots">
+    <span
+      *ngFor="let img of imagenes; let i = index"
+      class="dot"
+      [class.active]="i === indiceActual"
+      (click)="irA(i)"
+    ></span>
+  </div>
+</section>

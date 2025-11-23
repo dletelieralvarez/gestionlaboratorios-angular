@@ -1,13 +1,13 @@
 <article class="panel">
   <h2 class="section-title">Listado de Resultados</h2>
 
-  <button class="btn btn-primary" (click)="nuevoResultado()">➕ Nuevo Resultado</button>
+  <button class="btn btn-primary" (click)="nuevoResultado()" *ngIf="rolUsuario !== 'CLIENTE'">➕ Nuevo Resultado</button>
 
   <table *ngIf="resultados.length > 0; else sinResultados" class="tabla-resultados">
     <thead>
       <tr>
         <th>ID</th>
-        <th>Usuario</th>
+        <th *ngIf="rolUsuario !== 'CLIENTE'">Usuario</th>        
         <th>Tipo Análisis</th>
         <th>Laboratorio</th>
         <th>Valores</th>
@@ -21,6 +21,7 @@
     <tbody>
       <tr *ngFor="let r of resultados">
         <td>{{ r.id }}</td>
+        <td *ngIf="rolUsuario !== 'CLIENTE'">{{ r.usuarioId }}</td>
         <td>{{ r.usuarioId }}</td>
         <td>{{ r.tipo }}</td>
         <td>{{ r.idLaboratorio }}</td>
@@ -29,7 +30,11 @@
         <td>{{ r.fechaResultado | date:'dd/MM/yyyy' }}</td>
         <td>{{ r.estado }}</td>
 
-        <td>
+        <td *ngIf="rolUsuario === 'CLIENTE'">
+        —
+        </td>
+
+        <td *ngIf="rolUsuario !== 'CLIENTE'">
           <button class="btn btn-sm btn-warning" (click)="editarResultado(r.id!)">✏ Editar</button>
           <button class="btn btn-sm btn-danger" (click)="eliminarResultado(r.id!)">🗑 Eliminar</button>
         </td>

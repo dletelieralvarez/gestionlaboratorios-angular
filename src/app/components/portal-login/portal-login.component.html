@@ -1,0 +1,74 @@
+
+<main class="auth-wrapper">
+  <section class="auth-card">
+    <h1 class="auth-title">Ingresa a Mi Salud</h1>
+    <p class="auth-subtitle">
+      Revisa tus exámenes de laboratorio de forma rápida y segura.
+    </p>
+
+    <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+      <!-- RUT -->
+      <div class="form-field">
+        <label for="rut">RUT</label>
+        <input
+          id="rut"
+          type="text"
+          formControlName="rut"
+          placeholder="Ej: 17379439"
+        />
+        <div class="field-error" *ngIf="rut?.touched && rut?.invalid">
+          <span *ngIf="rut?.errors?.['required']">
+            El RUT es obligatorio.
+          </span>
+          <span *ngIf="rut?.errors?.['minlength']">
+            El RUT parece demasiado corto.
+          </span>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="password">Contraseña</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Ingresa tu contraseña"
+        />
+        <div class="field-error" *ngIf="password?.touched && password?.invalid">
+          <span *ngIf="password?.errors?.['required']">
+            La contraseña es obligatoria.
+          </span>
+          <span *ngIf="password?.errors?.['minlength']">
+            La contraseña es muy corta.
+          </span>
+        </div>
+      </div>
+
+      <div class="alert-error" *ngIf="errorMsg">
+        {{ errorMsg }}
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary btn-full"
+        [disabled]="form.invalid || cargando"
+      >
+        <span *ngIf="!cargando">Ingresar</span>
+        <span *ngIf="cargando">Ingresando...</span>
+      </button>
+    </form>
+
+    <div class="auth-links">
+      <!-- <button type="button" class="link" (click)="recuperarPassword()"> -->
+      <button type="button" class="link" (click)="irARecuperarPassword()">
+        ¿Olvidaste tu contraseña?
+      </button>
+
+      <span class="divider">·</span>
+
+      <button type="button" class="link" (click)="irARegistro()">
+        Regístrate aquí
+      </button>
+    </div>
+  </section>
+</main>

@@ -19,26 +19,46 @@ export class ResultadoListaComponent {
     private resultado_service: resultadoService, 
     private router: Router
   ){}
-  
+
+    rolUsuario: string = '';    
       ngOnInit(): void {
-          this.resultado_service.getAllResultado().subscribe({
-          next: (data: Resultado[]) => {
-          console.log('Resultado desde backend:', data);
-          this.resultados = data;
-        },
-        error: (err) => {
-          console.error('Error cargando resultados', err);
-        }
-      });
+          this.rolUsuario = localStorage.getItem('rol') ?? ''; 
+          const idUsuario = Number(localStorage.getItem('id')); 
+
+          if(this.rolUsuario === 'CLIENTE' && idUsuario){
+            this.resultado_service.getResultadosPorUsuario(idUsuario).subscribe({
+            //this.resultado_service.getResultadosPorUsuario(idUsuario).subscribe({
+              next:(resp) => {
+                this.resultados = resp.data || [];
+              }, 
+              error:(err) => console.error('Error cargando resultados por usuario', err)
+            });
+          }else{
+            this.resultado_service.getAllResultado().subscribe({
+              next: (resp) => {
+                this.resultados = resp.data || [];
+              },
+              error: (err) => console.error('Error cargando todos los resultados', err)
+            });
+          }
+
+      //     this.resultado_service.getAllResultado().subscribe({
+      //     next: (data: Resultado[]) => {
+      //     console.log('Resultado desde backend:', data);
+      //     this.resultados = data;
+      //     this.cargarResultados(); 
+      //   },
+      //   error: (err) => {
+      //     console.error('Error cargando resultados', err);
+      //   }
+      // });
     }
 
-    cargarResultados():void{
-      this.resultado_service.getAllResultado().subscribe(
-        {
-            next: (data) => this.resultados = data, 
-            error: (err) => console.error('Error desde el backend al listar resultados', err)
-        }
-      );
+    cargarResultados():void {
+      this.resultado_service.getAllResultado().subscribe({
+        next: (resp) => this.resultados = resp.data,
+        error: (err) => console.error('Error desde el backend al listar resultados', err)
+      });
     }
 
     nuevoResultado(): void{

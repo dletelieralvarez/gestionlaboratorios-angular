@@ -1,0 +1,44 @@
+<main class="auth-wrapper">
+  <section class="auth-card">
+    <h1 class="auth-title">Regístrate en Mi Salud</h1>
+
+    <form [formGroup]="form" (ngSubmit)="registrar()" novalidate>
+      <div class="form-field">
+        <label for="rut">RUT</label>
+        <input id="rut" type="text" formControlName="rut" />
+      </div>
+
+      <div class="form-field">
+        <label for="nombres">Nombres</label>
+        <input id="nombres" type="text" formControlName="nombres" />
+      </div>
+
+      <div class="form-field">
+        <label for="apellidos">Apellidos</label>
+        <input id="apellidos" type="text" formControlName="apellidos" />
+      </div>
+
+      <div class="form-field">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" />
+      </div>
+
+      <div class="form-field">
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" formControlName="password" />
+      </div>
+
+      <div class="alert-error" *ngIf="errorMsg">
+        {{ errorMsg }}
+      </div>
+      <div class="alert-success" *ngIf="okMsg">
+        {{ okMsg }}
+      </div>
+
+      <button class="btn btn-primary btn-full" type="submit" [disabled]="form.invalid || cargando">
+        <span *ngIf="!cargando">Crear cuenta</span>
+        <span *ngIf="cargando">Creando...</span>
+      </button>
+    </form>
+  </section>
+</main>

@@ -9,14 +9,12 @@ import { Resultado } from '../models/Resultado';
   providedIn: 'root'
 })
 export class resultadoService{
-    private readonly apiUrl= `${environment.apiBaseUrl}/resultados`;
+    private readonly apiUrl= `${environment.apiBaseUrl}`;
 
     constructor(private http: HttpClient){}
 
-    getAllResultado(): Observable<Resultado[]>{
-        return this.http.get<ApiResponse<Resultado[]>>(this.apiUrl).pipe(
-            map(resp=> resp.data)
-        );
+    getAllResultado(){
+        return this.http.get<ApiResponse<Resultado[]>>(`${this.apiUrl}/api/resultados`);
     }
 
     getResultadoById(id:number): Observable<Resultado>{
@@ -69,4 +67,7 @@ export class resultadoService{
             .pipe(map(resp => resp.data));
     }
 
+    getResultadosPorUsuario(usuarioId:number){
+        return this.http.get<ApiResponse<Resultado[]>>(`${this.apiUrl}/api/resultados/usuario/${usuarioId}`);
+    }
 }

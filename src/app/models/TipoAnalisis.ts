@@ -1,7 +1,7 @@
 export enum TipoAnalisis{
-    Hemograma='Hemograma',
-    Glucosa='Glucosa',
+    Hemograma='HEMOGRAMA',
+    Glucosa='GLUCOSA',
     PCR='PCR', 
-    Colesterol='Colesterol', 
-    Orina_Completa='Orina_Completa'
+    Colesterol='COLESTEROL', 
+    Orina_Completa='ORINA_COMPLETA'
 }

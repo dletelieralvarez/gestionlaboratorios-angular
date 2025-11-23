@@ -8,47 +8,14 @@
   </div>
 
   <nav class="main-nav">
-    <a routerLink="/resultados" routerLinkActive="active">Mis Exámenes</a>
-    <a routerLink="/perfil" routerLinkActive="active">Mi Perfil</a>
+    <a routerLink="/portal/login" routerLinkActive="active">Mis Exámenes</a>
+    <a routerLink="/home" routerLinkActive="active">Inicio</a>
   </nav>
 </header>
 
 <main class="main-content">
-  <!-- Hero principal -->
-  <section class="hero">
-    <div class="hero-text">
-      <h1>Revisa tus exámenes de laboratorio en línea</h1>
-      <p>
-        Consulta tus resultados médicos de forma rápida, segura y desde cualquier
-        dispositivo. Mantén el control de tu historial de salud.
-      </p>
-
-      <div class="hero-actions">
-        <button class="btn btn-primary" routerLink="/resultados">
-          Ver mis exámenes
-        </button>
-        <button class="btn btn-outline" routerLink="/perfil">
-          Mi perfil
-        </button>
-      </div>
-    </div>
-
-    <div class="hero-card">
-      <h3>Próximos exámenes</h3>
-      <ul>
-        <app-resultado-lista></app-resultado-lista>
-      </ul>
-    </div>
-  </section>
-
-  <!-- Zona de listas -->
-  <section class="grid-2">
-    <app-rol-lista></app-rol-lista>
-    <app-resultado-lista></app-resultado-lista>
-  </section>
-
-  <!-- Otras páginas que entren por routing -->
-  <router-outlet></router-outlet>
+  
+  <router-outlet></router-outlet> 
 </main>
 
 <footer class="main-footer">
