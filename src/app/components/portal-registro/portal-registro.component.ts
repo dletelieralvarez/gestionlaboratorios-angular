@@ -34,34 +34,35 @@ export class PortalRegistroComponent {
   }
 
   registrar() {
-    if (this.form.invalid) return;
+  if (this.form.invalid) {
+    this.form.markAllAsTouched(); 
+    this.errorMsg = 'Por favor revisa los campos resaltados.';
+    return;
+  }
 
-    this.cargando = true;
-    this.errorMsg = '';
-    this.okMsg = '';
+  this.cargando = true;
+  this.errorMsg = '';
+  this.okMsg = '';
 
-    this.usuariosService.registrar(this.form.value).subscribe({
-      next: (resp) => {
-        this.cargando = false;
-        if (resp.codigoEstado === 200 || resp.codigoEstado === 201) {
-          this.okMsg = 'Usuario creado correctamente. Ahora puedes iniciar sesión.';
-          this.router.navigate(['portal/login']); 
-          
-        } else {
-          this.errorMsg = resp.mensaje || 'No se pudo registrar el usuario.';
-        }
-      },
-      error: (err) => {
-        this.cargando = false;
-        console.error('Error registro', err);
-        //this.errorMsg = 'Ocurrió un problema al registrar. Intenta nuevamente.';
+  this.usuariosService.registrar(this.form.value).subscribe({
+    next: (resp) => {
+      this.cargando = false;
+      if (resp.codigoEstado === 200 || resp.codigoEstado === 201) {
+        this.okMsg = 'Usuario creado correctamente.';
+        this.router.navigate(['portal/login']);
+      } else {
+        this.errorMsg = resp.mensaje || 'No se pudo registrar el usuario.';
+      }
+    },
+    error: (err) => {
+      this.cargando = false;
+      console.error('Error registro', err);
 
-        if(err.error?.mensaje){
-          this.errorMsg = err.error.mensaje;           
-        }
-        else{
-          this.errorMsg = 'Ocurrió un problema al registrar. Intente nuevamente';
-       }
+      if (err.error?.mensaje) {
+        this.errorMsg = err.error.mensaje;
+      } else {
+        this.errorMsg = 'Ocurrió un problema al registrar. Intente nuevamente';
+      }
     }
   });
 }

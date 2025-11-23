@@ -1,9 +1,8 @@
 .auth-wrapper {
-  min-height: calc(100vh - 80px); // considerando el header
+  min-height: calc(100vh - 180px); /* menos alto para que aparezca el footer */
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 2rem 1rem;
+  padding: 4rem 1rem 2rem;
   background: linear-gradient(180deg, #f5f7fb 0%, #eef2f8 100%);
 }
 

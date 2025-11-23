@@ -80,3 +80,28 @@
   width: 18px;
   background: #22c55e;
 }
+
+@media (max-width: 768px) {
+
+  /* Que el carrusel respete el ancho del contenido */
+  .hero-carousel-full {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .carousel {
+    margin-top: 3.5rem;   /* separa bien del menú */
+  }
+}
+
+
+@media (max-width: 768px) {
+  .carousel-inner {
+    padding-top: 70%;   /* antes 45% */
+  }
+
+  .carousel {
+    margin-top: 1.2rem; /* separa menos del menú */
+  }
+}
+

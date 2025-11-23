@@ -3,6 +3,7 @@
 
   <button class="btn btn-primary" (click)="nuevoResultado()" *ngIf="rolUsuario !== 'CLIENTE'">➕ Nuevo Resultado</button>
 
+  <div class="tabla-wrapper">
   <table *ngIf="resultados.length > 0; else sinResultados" class="tabla-resultados">
     <thead>
       <tr>
@@ -41,7 +42,7 @@
       </tr>
     </tbody>
   </table>
-
+</div>
   <ng-template #sinResultados>
     <p>No hay resultados disponibles.</p>
   </ng-template>

@@ -6,26 +6,62 @@
       <div class="form-field">
         <label for="rut">RUT</label>
         <input id="rut" type="text" formControlName="rut" />
+        <div class="campo-error"
+          *ngIf="form.get('rut')?.touched && form.get('rut')?.invalid">
+          <small *ngIf="form.get('rut')?.errors?.['required']">
+            El RUT es obligatorio.
+          </small>
+  </div>
       </div>
 
       <div class="form-field">
         <label for="nombres">Nombres</label>
         <input id="nombres" type="text" formControlName="nombres" />
+        <div class="campo-error"
+            *ngIf="form.get('nombres')?.touched && form.get('nombres')?.invalid">
+          <small *ngIf="form.get('nombres')?.errors?.['required']">
+            Los nombres son obligatorios.
+          </small>
+        </div>
       </div>
 
       <div class="form-field">
         <label for="apellidos">Apellidos</label>
         <input id="apellidos" type="text" formControlName="apellidos" />
+        <div class="campo-error"
+            *ngIf="form.get('apellidos')?.touched && form.get('apellidos')?.invalid">
+          <small *ngIf="form.get('apellidos')?.errors?.['required']">
+            Los apellidos son obligatorios.
+          </small>
+        </div>
       </div>
 
       <div class="form-field">
         <label for="email">Email</label>
         <input id="email" type="email" formControlName="email" />
+        <div class="campo-error"
+            *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
+          <small *ngIf="form.get('email')?.errors?.['required']">
+            El email es obligatorio.
+          </small>
+          <small *ngIf="form.get('email')?.errors?.['email']">
+            El email no tiene un formato válido.
+          </small>
+        </div>
       </div>
 
       <div class="form-field">
         <label for="password">Contraseña</label>
         <input id="password" type="password" formControlName="password" />
+        <div class="campo-error"
+            *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
+          <small *ngIf="form.get('password')?.errors?.['required']">
+            La contraseña es obligatoria.
+          </small>
+          <small *ngIf="form.get('password')?.errors?.['minlength']">
+            La contraseña debe tener al menos 6 caracteres.
+          </small>
+        </div>
       </div>
 
       <div class="alert-error" *ngIf="errorMsg">
@@ -35,7 +71,7 @@
         {{ okMsg }}
       </div>
 
-      <button class="btn btn-primary btn-full" type="submit" [disabled]="form.invalid || cargando">
+      <button class="btn btn-primary btn-full" type="submit" [disabled]="cargando">
         <span *ngIf="!cargando">Crear cuenta</span>
         <span *ngIf="cargando">Creando...</span>
       </button>
