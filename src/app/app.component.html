@@ -8,8 +8,12 @@
   </div>
 
   <nav class="main-nav">
-    <a routerLink="/portal/login" routerLinkActive="active">Mis Exámenes</a>
+    <!-- <a routerLink="/portal/login" routerLinkActive="active">Mis Exámenes</a> -->
+
+    <a (click)="irAMisExamenes()">Mis Exámenes</a>
+    <a routerLink="/portal/perfil" routerLinkActive="active">Mi Perfil</a>
     <a routerLink="/home" routerLinkActive="active">Inicio</a>
+    <a class="logout-btn" (click)="cerrarSesion()">Cerrar Sesión</a>
   </nav>
 </header>
 

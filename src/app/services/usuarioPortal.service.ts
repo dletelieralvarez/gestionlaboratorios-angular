@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environments';
 import { ApiResponse } from '../models/ApiRespose';
 import { RegistroUsuarioPortal } from '../models/RegistroUsuarioPortal';
 import { RecuperarPassword } from '../models/RecuperarPassword';
+import { PerfilUsuarioPortalDTO } from '../models/PerfilUsuarioPortalDTO';
 
 @Injectable({ 
   providedIn: 'root' 
@@ -34,6 +35,19 @@ export class UsuariosPortalService {
    return this.http.post<ApiResponse<RecuperarPassword>>(
       `${this.apiUrl}/usuarios/recuperar-password`,
       body
+    );
+  }
+
+  obtenerPerfil(id: number) {
+    return this.http.get<ApiResponse<PerfilUsuarioPortalDTO>>(
+      `${this.apiUrl}/usuarios/perfil/${id}`
+    );
+  }
+
+  actualizarPerfil(perfil: PerfilUsuarioPortalDTO) {
+    return this.http.put<ApiResponse<PerfilUsuarioPortalDTO>>(
+      `${this.apiUrl}/usuarios/perfil/${perfil.id}`,
+      perfil
     );
   }
 }
