@@ -45,47 +45,37 @@ export class ResultadoFormComponent implements OnInit {
         fechaResultado:[{value:null, disabled:true}], 
         /*comienza En Proceso*/
         estado:[{value: EstadoResultado.En_Proceso, disabled:true}],
-
         creado:[null],
         actualizado:[null]
       });
 
-      /*si es una actualizacion cargo el resultado*/
-      if(this.id){
-        this.cargarResultado(this.id); 
-      }else{
-        this.form.patchValue({creado: new Date()}); 
+      // 2. Si es nuevo, seteo "creado"
+    this.form.patchValue({ creado: new Date() });
+
+    // 3. Calcular fechaResultado al cambiar fechaMuestra
+    this.form.get('fechaMuestra')!.valueChanges.subscribe(value => {
+      if (!value) {
+        this.form.patchValue({ fechaResultado: null }, { emitEvent: false });
+        return;
       }
 
-      /*cada vez que cambie fecha de muestra calculará la fecha de resultado*/
-      this.form.get('fechaMuestra')!.valueChanges.subscribe(value => { 
-            if(!value){
-              this.form.patchValue({ fechaResultado: null }, { emitEvent: false}); 
-              return;
-            }
-            
-            const fecha = new Date(value); 
-            const fechaResultado = new Date(fecha); 
-            fechaResultado.setDate(fechaResultado.getDate() + 3); 
+      const fecha = new Date(value);
+      const fechaResultado = new Date(fecha);
+      fechaResultado.setDate(fechaResultado.getDate() + 3);
 
-            //formato a la fecha
-            const iso = fechaResultado.toISOString().substring(0,10); 
+      const iso = fechaResultado.toISOString().substring(0, 10);
+      this.form.patchValue({ fechaResultado: iso }, { emitEvent: false });
+    });
 
-            this.form.patchValue(
-              { fechaResultado: iso},
-              { emitEvent: false}
-            );
-        }); 
-
-      /*aqui veo si viene el id en la ruta*/
-      this.route.paramMap.subscribe(params => {
-        const idParam = params.get('id'); 
-        if(idParam){
-          this.id = +idParam; 
-          this.titulo = 'Editar Resultado';  
-          this.cargarResultado(this.id); 
-        }
-      });
+    // 4. Leo el id de la ruta,solo una vez y cargo si existe
+    this.route.paramMap.subscribe(params => {
+      const idParam = params.get('id');
+      if (idParam) {
+        this.id = +idParam;
+        this.titulo = 'Editar Resultado';
+        this.cargarResultado(this.id);
+      }
+    });
   }
 
   private cargarResultado(id:number): void{
@@ -94,18 +84,22 @@ export class ResultadoFormComponent implements OnInit {
         /*llena el formulario con los datos*/
         this.form.patchValue(
           {
-            usuarioId: resultado.usuarioId, 
-            tipo:resultado.tipo, 
-            idLaboratorio:resultado.idLaboratorio,
-            valores:resultado.valores, 
-            fechaMuestra:resultado.fechaMuestra, 
-            fechaResultado:resultado.fechaResultado, 
-            estado:resultado.estado,
-            creado: resultado.creado, 
+            usuarioId: resultado.usuarioId,
+            tipo: resultado.tipo,
+            idLaboratorio: resultado.idLaboratorio,
+            valores: resultado.valores,
+            fechaMuestra: resultado.fechaMuestra,
+            fechaResultado: resultado.fechaResultado,
+            estado: resultado.estado,
+            creado: resultado.creado,
             actualizado: resultado.actualizado
           }); 
 
+          this.form.get('usuarioId')!.disable();
+          this.form.get('tipo')!.disable();
+          //this.form.get('idLaboratorio')!.enable(); 
           this.form.get('estado')!.enable(); 
+          
       }, 
       error: err =>{
         console.error('Error cargando resultado', err); 
@@ -114,24 +108,28 @@ export class ResultadoFormComponent implements OnInit {
   }
 
   /*guardar nuevo resultado*/
-  guardar():void{
-
-    if(this.form.invalid){
-      this.form.markAllAsTouched(); 
-      return; 
+  guardar(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
     }
 
-    const datos: Resultado = this.form.getRawValue(); 
-    const valoresForm = this.form.value as Resultado; 
+    const raw = this.form.getRawValue();
 
-    /*si viene el id, editara sino crea el resultado*/
-    if(this.id){
-      this.resultado_service.actualizarResultado(this.id, datos).subscribe({
+    // Convierte usuarioId (number) en usuario { id: number }
+    const payload: any = {
+      ...raw,
+      usuario: { id: raw.usuarioId }
+    };
+    delete payload.usuarioId;
+
+    if (this.id) {
+      this.resultado_service.actualizarResultado(this.id, payload).subscribe({
         next: () => this.volverALaLista(),
         error: err => console.error('Error actualizando resultado', err)
       });
-    }else{
-      this.resultado_service.crearResultado(datos).subscribe({
+    } else {
+      this.resultado_service.crearResultado(payload).subscribe({
         next: () => this.volverALaLista(),
         error: err => console.error('Error guardando resultado', err)
       });

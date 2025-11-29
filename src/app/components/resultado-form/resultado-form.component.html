@@ -5,12 +5,18 @@
 
     <div class="form-row">
       <label>Usuario ID</label>
-      <input type="number" formControlName="usuarioId" />
+      <input type="number" formControlName="usuarioId" [readonly]="!!id"/>
     </div>
 
+    <!-- TIPO DE ANÁLISIS: select usando el enum -->
     <div class="form-row">
       <label>Tipo de análisis</label>
-      <input type="text" formControlName="tipo" />
+      <select formControlName="tipo">
+        <option value="" disabled>Selecciona un tipo</option>
+        <option *ngFor="let t of tipoAnalisis" [value]="t">
+          {{ t }}
+        </option>
+      </select>
     </div>
 
     <div class="form-row">
@@ -28,14 +34,20 @@
       <input type="date" formControlName="fechaMuestra" />
     </div>
 
+    <!-- FECHA RESULTADO: solo lectura (la calcula el TS) -->
     <div class="form-row">
       <label>Fecha resultado</label>
-      <input type="date" formControlName="fechaResultado" />
+      <input type="date" formControlName="fechaResultado" readonly />
     </div>
 
+    <!-- ESTADO: select, solo editable cuando hay id (modo edición) -->
     <div class="form-row">
       <label>Estado</label>
-      <input type="text" formControlName="estado" />
+      <select formControlName="estado" [disabled]="!id">
+        <option *ngFor="let e of estados" [value]="e">
+          {{ e }}
+        </option>
+      </select>
     </div>
 
     <div class="buttons">

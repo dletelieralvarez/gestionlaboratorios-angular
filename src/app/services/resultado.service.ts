@@ -9,12 +9,12 @@ import { Resultado } from '../models/Resultado';
   providedIn: 'root'
 })
 export class resultadoService{
-    private readonly apiUrl= `${environment.apiBaseUrl}`;
+    private readonly apiUrl= `${environment.apiBaseUrl}/api/resultados`;
 
     constructor(private http: HttpClient){}
 
     getAllResultado(){
-        return this.http.get<ApiResponse<Resultado[]>>(`${this.apiUrl}/api/resultados`);
+        return this.http.get<ApiResponse<Resultado[]>>(`${this.apiUrl}`);
     }
 
     getResultadoById(id:number): Observable<Resultado>{
@@ -23,10 +23,10 @@ export class resultadoService{
         );
     }
 
-    crearResultado(data: Omit<Resultado, 'id' | 'creado' | 'actualizado'>): Observable<Resultado>{
-            return this.http.post<ApiResponse<Resultado>>(this.apiUrl, data).pipe(
-            map(resp=> resp.data)
-        );
+    crearResultado(data: Resultado): Observable<Resultado> {
+        return this.http
+            .post<ApiResponse<Resultado>>(this.apiUrl, data)
+            .pipe(map(resp => resp.data));
     }
 
     actualizarResultado(id: number, resultado: Resultado): Observable<Resultado>{
@@ -68,6 +68,8 @@ export class resultadoService{
     }
 
     getResultadosPorUsuario(usuarioId:number){
-        return this.http.get<ApiResponse<Resultado[]>>(`${this.apiUrl}/api/resultados/usuario/${usuarioId}`);
+        return this.http.get<ApiResponse<Resultado[]>>(`${this.apiUrl}/usuario/${usuarioId}`);
     }
+
+    
 }
