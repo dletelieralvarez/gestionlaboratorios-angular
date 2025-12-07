@@ -18,7 +18,7 @@ module.exports = function (config) {
       subdir: '.',                                          
       reporters: [
         { type: 'html' },                                   // index.html etc
-        { type: 'lcovonly', file: 'lcov.info' },            // genera lcov.info
+        { type: 'lcov', file: 'lcov.info' },            // genera lcov.info
         { type: 'text-summary' },                           // resumen en consola
       ],
       fixWebpackSourcePaths: true,
