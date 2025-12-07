@@ -1,13 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  HttpClientTestingModule,
-  HttpTestingController
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { rolService } from './rol.service';
 import { environment } from 'src/environments/environments';
 import { Rol } from '../models/Rol';
 import { ApiResponse } from '../models/ApiRespose';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('rolService', () => {
   let service: rolService;
@@ -22,9 +20,9 @@ describe('rolService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [rolService]
-    });
+    imports: [],
+    providers: [rolService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
     service = TestBed.inject(rolService);
     httpMock = TestBed.inject(HttpTestingController);

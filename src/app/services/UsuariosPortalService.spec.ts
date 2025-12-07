@@ -1,8 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  HttpClientTestingModule,
-  HttpTestingController
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { UsuariosPortalService } from './usuarioPortal.service';
 import { environment } from 'src/environments/environments';
@@ -14,6 +11,7 @@ import {
 import { RegistroUsuarioPortal } from '../models/RegistroUsuarioPortal';
 import { RecuperarPassword } from '../models/RecuperarPassword';
 import { PerfilUsuarioPortalDTO } from '../models/PerfilUsuarioPortalDTO';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('UsuariosPortalService', () => {
   let service: UsuariosPortalService;
@@ -23,9 +21,9 @@ describe('UsuariosPortalService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [UsuariosPortalService]
-    });
+    imports: [],
+    providers: [UsuariosPortalService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
     service = TestBed.inject(UsuariosPortalService);
     httpMock = TestBed.inject(HttpTestingController);

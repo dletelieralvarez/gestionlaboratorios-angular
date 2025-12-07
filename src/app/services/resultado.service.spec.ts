@@ -1,13 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  HttpClientTestingModule,
-  HttpTestingController
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { resultadoService } from './resultado.service';
 import { environment } from 'src/environments/environments';
 import { ApiResponse } from '../models/ApiRespose';
 import { Resultado } from '../models/Resultado';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('resultadoService', () => {
   let service: resultadoService;
@@ -30,9 +28,9 @@ describe('resultadoService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [resultadoService]
-    });
+    imports: [],
+    providers: [resultadoService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
     service = TestBed.inject(resultadoService);
     httpMock = TestBed.inject(HttpTestingController);
