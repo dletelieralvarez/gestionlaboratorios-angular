@@ -8,11 +8,10 @@ import { ApiResponse } from 'src/app/models/ApiRespose';
 import { RecuperarPassword } from 'src/app/models/RecuperarPassword';
 
 @Component({
-  selector: 'app-portal-recuperar-password',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
-  templateUrl: './portal-recuperar-password.component.html',
-  styleUrls: ['./portal-recuperar-password.component.scss']
+    selector: 'app-portal-recuperar-password',
+    imports: [CommonModule, ReactiveFormsModule, RouterLink],
+    templateUrl: './portal-recuperar-password.component.html',
+    styleUrls: ['./portal-recuperar-password.component.scss']
 })
 export class PortalRecuperarPasswordComponent {
   form: FormGroup;

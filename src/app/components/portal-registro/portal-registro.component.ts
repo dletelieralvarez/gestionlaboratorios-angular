@@ -6,11 +6,10 @@ import { RouterLink } from '@angular/router';
 import { UsuariosPortalService } from 'src/app/services/usuarioPortal.service';
 
 @Component({
-  selector: 'app-portal-registro',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
-  templateUrl: './portal-registro.component.html',
-  styleUrls: ['./portal-registro.component.scss']
+    selector: 'app-portal-registro',
+    imports: [CommonModule, ReactiveFormsModule, RouterLink],
+    templateUrl: './portal-registro.component.html',
+    styleUrls: ['./portal-registro.component.scss']
 })
 export class PortalRegistroComponent {
 

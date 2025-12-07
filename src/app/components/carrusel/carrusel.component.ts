@@ -2,11 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-carrusel',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './carrusel.component.html',
-  styleUrls: ['./carrusel.component.scss']
+    selector: 'app-carrusel',
+    imports: [CommonModule],
+    templateUrl: './carrusel.component.html',
+    styleUrls: ['./carrusel.component.scss']
 })
 export class CarruselComponent implements OnInit, OnDestroy {
 

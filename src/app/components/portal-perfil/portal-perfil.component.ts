@@ -8,11 +8,10 @@ import { Router } from '@angular/router';
 import { RouterLink, RouterLinkActive } from '@angular/router'; 
 
 @Component({
-  selector: 'app-portal-perfil',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './portal-perfil.component.html',
-  styleUrls: ['./portal-perfil.component.scss']
+    selector: 'app-portal-perfil',
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './portal-perfil.component.html',
+    styleUrls: ['./portal-perfil.component.scss']
 })
 export class PortalPerfilComponent implements OnInit {
   cargando = false;

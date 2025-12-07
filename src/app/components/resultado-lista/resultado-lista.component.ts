@@ -6,11 +6,10 @@ import { Resultado } from 'src/app/models/Resultado';
 import { NotExpr } from '@angular/compiler';
 
 @Component({
-  selector: 'app-resultado-lista',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './resultado-lista.component.html',
-  styleUrls: ['./resultado-lista.component.scss']
+    selector: 'app-resultado-lista',
+    imports: [CommonModule],
+    templateUrl: './resultado-lista.component.html',
+    styleUrls: ['./resultado-lista.component.scss']
 })
 export class ResultadoListaComponent {
   resultados: Resultado[] = []

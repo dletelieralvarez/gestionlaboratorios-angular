@@ -9,11 +9,10 @@ import { TipoAnalisis } from 'src/app/models/TipoAnalisis';
 import { EstadoResultado } from 'src/app/models/EstadoResultado';
 
 @Component({
-  selector: 'app-resultado-form',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './resultado-form.component.html',
-  styleUrls: ['./resultado-form.component.scss']
+    selector: 'app-resultado-form',
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './resultado-form.component.html',
+    styleUrls: ['./resultado-form.component.scss']
 })
 export class ResultadoFormComponent implements OnInit {
   form!: FormGroup; 

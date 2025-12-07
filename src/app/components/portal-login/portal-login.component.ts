@@ -7,11 +7,10 @@ import { UsuariosPortalService } from 'src/app/services/usuarioPortal.service';
 import { LoginUsuarioPortalDTO } from 'src/app/models/UsuarioPortal';
 
 @Component({
-  selector: 'app-portal-login',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './portal-login.component.html',
-  styleUrls: ['./portal-login.component.scss']
+    selector: 'app-portal-login',
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './portal-login.component.html',
+    styleUrls: ['./portal-login.component.scss']
 })
 export class PortalLoginComponent {
 cargando = false;

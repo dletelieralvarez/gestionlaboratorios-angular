@@ -6,11 +6,10 @@ import { ResultadoListaComponent } from "./components/resultado-lista/resultado-
 
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [CommonModule, RouterLink, RouterOutlet, RolListaComponent, ResultadoListaComponent],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    imports: [CommonModule, RouterLink, RouterOutlet, RolListaComponent, ResultadoListaComponent],
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   title = 'gestionlaboratorios-angular';
