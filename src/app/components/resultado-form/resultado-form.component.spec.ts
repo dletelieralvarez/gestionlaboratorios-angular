@@ -119,8 +119,10 @@ describe('ResultadoFormComponent', () => {
     const payloadEnviado: any =
       resultadoServiceSpy.crearResultado.calls.mostRecent().args[0];
 
-    expect(payloadEnviado.usuario).toEqual({ id: 10 });
-    expect(payloadEnviado.usuarioId).toBeUndefined();
+    expect(resultadoServiceSpy.crearResultado)
+      .toHaveBeenCalledWith(jasmine.objectContaining({
+      usuarioId: 10
+    }));
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/resultados']);
   });
 

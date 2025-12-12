@@ -317,14 +317,16 @@ describe('ResultadoListaComponent', () => {
     expect(routerSpy.navigate).toHaveBeenCalledWith(['resultados/editar', 99]);
   });
 
-  it('eliminarResultado NO debe llamar al servicio si id es truthy (por la condición actual)', () => {
-    const eliminarSpy = resultadoServiceSpy.eliminarResultado.and.returnValue(
-      of(null as any)
-    );
+  it('eliminarResultado debe llamar al servicio cuando id es válido y usuario confirma', () => {
+    spyOn(window, 'confirm').and.returnValue(true);
+
+    resultadoServiceSpy.eliminarResultado.and.returnValue(of(null as any));
+    const cargarSpy = spyOn(component, 'cargarResultados');
 
     component.eliminarResultado(123);
 
-    expect(eliminarSpy).not.toHaveBeenCalled();
+    expect(resultadoServiceSpy.eliminarResultado).toHaveBeenCalledWith(123);
+    expect(cargarSpy).toHaveBeenCalled();
   });
 
   it('eliminarResultado debe llamar al servicio cuando id es 0 y usuario confirma', () => {
