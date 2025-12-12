@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { RouterLink, RouterLinkActive } from '@angular/router'; 
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { UsuariosPortalService } from 'src/app/services/usuarioPortal.service';
 import { LoginUsuarioPortalDTO } from 'src/app/models/UsuarioPortal';
 
 @Component({
     selector: 'app-portal-login',
+    standalone: true,
     imports: [CommonModule, ReactiveFormsModule],
     templateUrl: './portal-login.component.html',
     styleUrls: ['./portal-login.component.scss']

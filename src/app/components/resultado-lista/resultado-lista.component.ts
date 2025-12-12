@@ -68,15 +68,17 @@ export class ResultadoListaComponent {
       this.router.navigate(['resultados/editar', id]); 
     }
 
-    eliminarResultado(id:number): void{
-      if(!!id) return; 
-      if(!confirm('¿Está seguro de eliminar este resultado?')) return; 
+    eliminarResultado(id: number): void {
+  if (id == null) return; 
 
-      this.resultado_service.eliminarResultado(id).subscribe({
-            next:() => this.cargarResultados(), 
-            error: (err) => console.error('Error eliminando resultado', err)    
-        });
-    }
+  const ok = confirm(`¿Eliminar resultado ID ${id}?`);
+  if (!ok) return;
+
+  this.resultado_service.eliminarResultado(id).subscribe({
+    next: () => this.cargarResultados(),
+    error: (err) => console.error('Error al eliminar', err)
+  });
+}
 
 
 

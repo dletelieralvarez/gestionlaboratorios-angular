@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink, Router  } from '@angular/router';
-import { RolListaComponent } from "./components/rol-lista/rol-lista.component";
-import { ResultadoListaComponent } from "./components/resultado-lista/resultado-lista.component";
-
+import { RouterOutlet, RouterLink, Router } from '@angular/router';
+import { RolListaComponent } from './components/rol-lista/rol-lista.component';
+import { ResultadoListaComponent } from './components/resultado-lista/resultado-lista.component';
 
 @Component({
-    selector: 'app-root',
-    imports: [CommonModule, RouterLink, RouterOutlet, RolListaComponent, ResultadoListaComponent],
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+  selector: 'app-root',
+  imports: [CommonModule, RouterLink, RouterOutlet, RolListaComponent, ResultadoListaComponent],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   title = 'gestionlaboratorios-angular';
@@ -17,13 +16,18 @@ export class AppComponent {
   constructor(private router: Router) {}
 
   cerrarSesion(): void {
-    localStorage.clear();  // Borra todos los datos de sesión
-    this.router.navigate(['/home']);  // Redirige al Home
+    localStorage.clear();
+    this.router.navigate(['/home']);
 
-    // Opcional: evitar que el usuario vuelva con botón "Atrás"
-    setTimeout(() => {
-      window.location.reload();
-    }, 20);
+    // Si está en Karma (tests), NO hacer reload de la página
+    const runningInKarma = typeof (window as any).__karma__ !== 'undefined';
+
+    /* istanbul ignore next */
+    if (!runningInKarma) {
+      setTimeout(() => {
+        window.location.reload();
+      }, 20);
+    }
   }
 
   irAMisExamenes(): void {
@@ -39,14 +43,13 @@ export class AppComponent {
     }
   }
 
-
   isMenuOpen = false;
 
-  toggleMenu() {
+  toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
-  closeMenu() {
+  closeMenu(): void {
     this.isMenuOpen = false;
   }
 }

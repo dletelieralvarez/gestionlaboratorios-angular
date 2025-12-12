@@ -172,4 +172,97 @@ describe('PortalLoginComponent', () => {
     expect(component.errorMsg).toBe('Error al solicitar recuperación de password');
     expect(alertSpy).toHaveBeenCalledWith('Error al solicitar recuperación de password');
   });
+
+  //TESTS EXTRA PARA MEJORAR BRANCHES 
+
+  it('enviar() no llama al servicio si el formulario es válido pero ya está cargando', () => {
+    component.form.patchValue({
+      rut: '11111111',
+      password: '1234',
+    });
+
+    component.cargando = true; // segunda condición del if
+
+    const markAllSpy = spyOn(component.form, 'markAllAsTouched');
+
+    component.enviar();
+
+    expect(markAllSpy).toHaveBeenCalled();
+    expect(usuariosPortalServiceSpy.login).not.toHaveBeenCalled();
+  });
+
+  it('enviar() no guarda nada en localStorage si resp.data es null', () => {
+    component.form.patchValue({
+      rut: '11111111',
+      password: '1234',
+    });
+
+    const respMock: any = {
+      mensaje: 'OK',
+      data: null, // user inexistente
+    };
+
+    usuariosPortalServiceSpy.login.and.returnValue(of(respMock as any));
+
+    const setItemSpy = spyOn(localStorage, 'setItem');
+
+    component.enviar();
+
+    expect(setItemSpy).not.toHaveBeenCalled();
+    expect(navigateSpy).toHaveBeenCalledWith(['/resultados']);
+  });
+
+  it('enviar() setea mensaje de error por defecto cuando no viene err.error.mensaje', () => {
+    component.form.patchValue({
+      rut: '11111111',
+      password: '1234',
+    });
+
+    usuariosPortalServiceSpy.login.and.returnValue(
+      throwError(() => ({})) // sin error.mensaje
+    );
+
+    component.enviar();
+
+    expect(component.cargando).toBeFalse();
+    expect(component.errorMsg)
+      .toBe('Ocurrió un problema al intentar iniciar sesión. Intenta nuevamente.');
+    expect(navigateSpy).not.toHaveBeenCalled();
+  });
+
+  it('recuperarPassword() sin tempPassword muestra solo el mensaje', () => {
+    component.form.patchValue({ rut: '11111111', password: '' });
+
+    const alertSpy = spyOn(window, 'alert');
+
+    const respMock: any = {
+      mensaje: 'Solicitud enviada',
+      data: {
+        tempPassword: null, // rama else del if (tempPassword)
+      },
+    };
+
+    usuariosPortalServiceSpy.recuperarPassword.and.returnValue(of(respMock as any));
+
+    component.recuperarPassword();
+
+    expect(component.cargando).toBeFalse();
+    expect(alertSpy).toHaveBeenCalledWith(respMock.mensaje);
+  });
+
+  it('recuperarPassword() error sin mensaje usa mensaje por defecto', () => {
+    component.form.patchValue({ rut: '11111111', password: '' });
+
+    const alertSpy = spyOn(window, 'alert');
+
+    usuariosPortalServiceSpy.recuperarPassword.and.returnValue(
+      throwError(() => ({})) // sin error.mensaje
+    );
+
+    component.recuperarPassword();
+
+    expect(component.cargando).toBeFalse();
+    expect(component.errorMsg).toBe('Error al solicitar recuperación de password');
+    expect(alertSpy).toHaveBeenCalledWith('Error al solicitar recuperación de password');
+  });
 });

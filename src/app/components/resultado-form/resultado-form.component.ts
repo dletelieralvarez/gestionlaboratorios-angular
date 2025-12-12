@@ -96,9 +96,11 @@ export class ResultadoFormComponent implements OnInit {
 
           this.form.get('usuarioId')!.disable();
           this.form.get('tipo')!.disable();
-          //this.form.get('idLaboratorio')!.enable(); 
-          this.form.get('estado')!.enable(); 
-          
+          this.form.get('idLaboratorio')!.disable();
+          this.form.get('valores')!.disable();
+          this.form.get('fechaMuestra')!.disable();
+          this.form.get('fechaResultado')!.disable();
+          this.form.get('estado')!.enable();          
       }, 
       error: err =>{
         console.error('Error cargando resultado', err); 
@@ -116,11 +118,13 @@ export class ResultadoFormComponent implements OnInit {
     const raw = this.form.getRawValue();
 
     // Convierte usuarioId (number) en usuario { id: number }
-    const payload: any = {
-      ...raw,
-      usuario: { id: raw.usuarioId }
-    };
-    delete payload.usuarioId;
+    // const payload: any = {
+    //   ...raw,
+    //   usuario: { id: raw.usuarioId }
+    // };
+    const payload = this.form.getRawValue();
+
+    //delete payload.usuarioId;
 
     if (this.id) {
       this.resultado_service.actualizarResultado(this.id, payload).subscribe({

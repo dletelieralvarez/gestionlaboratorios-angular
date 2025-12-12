@@ -48,6 +48,20 @@ describe('PortalPerfilComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('debe exponer los getters nombres, apellidos y email', () => {
+    const nombresControl   = component.nombres;
+    const apellidosControl = component.apellidos;
+    const emailControl     = component.email;
+
+    expect(nombresControl).toBeTruthy();
+    expect(apellidosControl).toBeTruthy();
+    expect(emailControl).toBeTruthy();
+
+    expect(nombresControl).toBe(component.form.get('nombres')!);
+    expect(apellidosControl).toBe(component.form.get('apellidos')!);
+    expect(emailControl).toBe(component.form.get('email')!);
+  });
+
   it('ngOnInit sin id en localStorage debe mostrar mensaje de error y NO llamar obtenerPerfil', () => {
     localStorage.removeItem('id'); // asegura que no haya id
 
@@ -55,6 +69,18 @@ describe('PortalPerfilComponent', () => {
 
     expect(component.errorMsg).toBe('No se encontró el usuario en sesión.');
     expect(usuariosServiceSpy.obtenerPerfil).not.toHaveBeenCalled();
+  });
+
+  // rama contraria de ngOnInit (con id)
+  it('ngOnInit con id en localStorage debe setear usuarioId y llamar cargarPerfil', () => {
+    localStorage.setItem('id', '10');
+
+    const cargarSpy = spyOn(component, 'cargarPerfil');
+
+    component.ngOnInit();
+
+    expect((component as any).usuarioId).toBe(10);
+    expect(cargarSpy).toHaveBeenCalled();
   });
 
   it('cargarPerfil() éxito: carga datos en el formulario', () => {
@@ -82,7 +108,6 @@ describe('PortalPerfilComponent', () => {
       nombres: 'Juan',
       apellidos: 'Pérez',
       email: 'juan@test.com',
-      // teléfono,
     });
     expect(component.errorMsg).toBe('');
   });
@@ -92,6 +117,21 @@ describe('PortalPerfilComponent', () => {
 
     usuariosServiceSpy.obtenerPerfil.and.returnValue(
       throwError(() => ({ error: { mensaje: 'Error al cargar el perfil' } }))
+    );
+
+    component.cargarPerfil();
+
+    expect(component.cargando).toBeFalse();
+    expect(component.errorMsg).toBe('Error al cargar el perfil');
+    expect(component.okMsg).toBe('');
+  });
+
+  // error sin mensaje (derecha del || en cargarPerfil)
+  it('cargarPerfil() error sin mensaje usa mensaje por defecto y deja okMsg vacío', () => {
+    (component as any).usuarioId = 10;
+
+    usuariosServiceSpy.obtenerPerfil.and.returnValue(
+      throwError(() => ({})) // sin error.mensaje
     );
 
     component.cargarPerfil();
@@ -118,7 +158,7 @@ describe('PortalPerfilComponent', () => {
     expect(usuariosServiceSpy.actualizarPerfil).not.toHaveBeenCalled();
   });
 
-  it('guardar() éxito: llama actualizarPerfil y setea okMsg', () => {
+  it('guardar() éxito: llama actualizarPerfil y setea okMsg con el mensaje del backend', () => {
     (component as any).usuarioId = 5;
 
     component.form.patchValue({
@@ -153,6 +193,34 @@ describe('PortalPerfilComponent', () => {
     expect(component.errorMsg).toBe('');
   });
 
+  it('guardar() éxito sin mensaje usa el mensaje por defecto', () => {
+    (component as any).usuarioId = 5;
+
+    component.form.patchValue({
+      nombres: 'Ana',
+      apellidos: 'García',
+      email: 'ana@test.com',
+    });
+
+    const respMock: any = {
+      // sin mensaje: debe usar 'Perfil actualizado correctamente'
+      data: {
+        id: 5,
+        nombres: 'Ana',
+        apellidos: 'García',
+        email: 'ana@test.com',
+      },
+    };
+
+    usuariosServiceSpy.actualizarPerfil.and.returnValue(of(respMock));
+
+    component.guardar();
+
+    expect(component.cargando).toBeFalse();
+    expect(component.okMsg).toBe('Perfil actualizado correctamente');
+    expect(component.errorMsg).toBe('');
+  });
+
   it('guardar() error: setea errorMsg y no okMsg', () => {
     (component as any).usuarioId = 5;
 
@@ -164,6 +232,45 @@ describe('PortalPerfilComponent', () => {
 
     usuariosServiceSpy.actualizarPerfil.and.returnValue(
       throwError(() => ({ error: { mensaje: 'Error al actualizar el perfil' } }))
+    );
+
+    component.guardar();
+
+    expect(component.cargando).toBeFalse();
+    expect(component.errorMsg).toBe('Error al actualizar el perfil');
+    expect(component.okMsg).toBe('');
+  });
+
+  // form válido pero cargando = true (segunda parte del OR en guardar)
+  it('guardar() no llama al servicio si el formulario es válido pero ya está cargando', () => {
+    component.form.patchValue({
+      nombres: 'Ana',
+      apellidos: 'García',
+      email: 'ana@test.com',
+    });
+
+    component.cargando = true;
+
+    const markAllSpy = spyOn(component.form, 'markAllAsTouched');
+
+    component.guardar();
+
+    expect(markAllSpy).toHaveBeenCalled();
+    expect(usuariosServiceSpy.actualizarPerfil).not.toHaveBeenCalled();
+  });
+
+  // error sin mensaje (derecha del || en guardar)
+  it('guardar() error sin mensaje usa mensaje por defecto y limpia okMsg', () => {
+    (component as any).usuarioId = 5;
+
+    component.form.patchValue({
+      nombres: 'Ana',
+      apellidos: 'García',
+      email: 'ana@test.com',
+    });
+
+    usuariosServiceSpy.actualizarPerfil.and.returnValue(
+      throwError(() => ({})) // sin error.mensaje
     );
 
     component.guardar();

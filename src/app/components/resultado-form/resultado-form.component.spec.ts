@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 import { ResultadoFormComponent } from './resultado-form.component';
 import { resultadoService } from 'src/app/services/resultado.service';
@@ -22,7 +22,7 @@ describe('ResultadoFormComponent', () => {
     ]);
 
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
- 
+
     activatedRouteStub = {
       snapshot: {
         paramMap: convertToParamMap({})
@@ -45,6 +45,19 @@ describe('ResultadoFormComponent', () => {
     fixture = TestBed.createComponent(ResultadoFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges(); // dispara ngOnInit
+  });
+
+  it('debe setear fechaResultado a null si fechaMuestra es null', () => {
+    const fechaResultadoControl = component.form.get('fechaResultado')!;
+
+    // primero un valor válido para comprobar el cambio
+    component.form.get('fechaMuestra')!.setValue('2025-01-10');
+    expect(fechaResultadoControl.value).toBe('2025-01-13');
+
+    // ahora null → entra al if (!value)
+    component.form.get('fechaMuestra')!.setValue(null);
+
+    expect(fechaResultadoControl.value).toBeNull();
   });
 
   it('debe crearse', () => {
@@ -103,11 +116,37 @@ describe('ResultadoFormComponent', () => {
 
     expect(resultadoServiceSpy.crearResultado).toHaveBeenCalled();
 
-    const payloadEnviado: any = resultadoServiceSpy.crearResultado.calls.mostRecent().args[0];
+    const payloadEnviado: any =
+      resultadoServiceSpy.crearResultado.calls.mostRecent().args[0];
 
     expect(payloadEnviado.usuario).toEqual({ id: 10 });
     expect(payloadEnviado.usuarioId).toBeUndefined();
     expect(routerSpy.navigate).toHaveBeenCalledWith(['/resultados']);
+  });
+
+  // rama de error al crear (cuando no hay id)
+  it('guardar() en modo NUEVO debe manejar error del servicio sin navegar', () => {
+    component.form.patchValue({
+      usuarioId: 10,
+      tipo: 'SANGRE',
+      idLaboratorio: 5,
+      valores: 'Hemograma OK',
+      fechaMuestra: '2025-01-01',
+      creado: new Date(),
+      actualizado: null
+    });
+
+    const consoleSpy = spyOn(console, 'error');
+
+    resultadoServiceSpy.crearResultado.and.returnValue(
+      throwError(() => 'Error al crear' as any)
+    );
+
+    component.guardar();
+
+    expect(resultadoServiceSpy.crearResultado).toHaveBeenCalled();
+    expect(consoleSpy).toHaveBeenCalled();            // rama error del subscribe
+    expect(routerSpy.navigate).not.toHaveBeenCalled();
   });
 
   it('guardar() debe actualizar cuando hay id (modo EDICIÓN)', () => {
@@ -167,6 +206,100 @@ describe('ResultadoFormComponent', () => {
         jasmine.any(Object)
       );
       expect(routerSpy.navigate).toHaveBeenCalledWith(['/resultados']);
+    });
+  });
+
+  // rama de error al actualizar (modo EDICIÓN)
+  it('guardar() en modo EDICIÓN debe manejar error del servicio sin navegar', () => {
+    const nuevoActivatedRoute = {
+      snapshot: {
+        paramMap: convertToParamMap({ id: '1' })
+      },
+      paramMap: of(convertToParamMap({ id: '1' }))
+    };
+
+    TestBed.resetTestingModule();
+    return TestBed.configureTestingModule({
+      imports: [
+        ResultadoFormComponent,
+        ReactiveFormsModule
+      ],
+      providers: [
+        { provide: resultadoService, useValue: resultadoServiceSpy },
+        { provide: Router, useValue: routerSpy },
+        { provide: ActivatedRoute, useValue: nuevoActivatedRoute }
+      ]
+    }).compileComponents().then(() => {
+      fixture = TestBed.createComponent(ResultadoFormComponent);
+      component = fixture.componentInstance;
+
+      resultadoServiceSpy.getResultadoById.and.returnValue(of({
+        id: 1,
+        usuarioId: 10,
+        tipo: 'SANGRE',
+        idLaboratorio: 1,
+        valores: '123',
+        fechaMuestra: '2025-01-01',
+        fechaResultado: '2025-01-04',
+        estado: EstadoResultado.En_Proceso,
+        creado: '2025-01-01',
+        actualizado: null
+      } as any));
+
+      fixture.detectChanges(); // ngOnInit y cargarResultado()
+
+      // modifica algo y obliga error al actualizar
+      component.form.get('valores')!.setValue('Nuevo valor');
+      component.form.get('estado')!.setValue(EstadoResultado.Finalizado);
+
+      const consoleSpy = spyOn(console, 'error');
+
+      resultadoServiceSpy.actualizarResultado.and.returnValue(
+        throwError(() => 'Error al actualizar' as any)
+      );
+
+      component.guardar();
+
+      expect(resultadoServiceSpy.actualizarResultado).toHaveBeenCalled();
+      expect(consoleSpy).toHaveBeenCalled();          // rama error del subscribe
+      expect(routerSpy.navigate).not.toHaveBeenCalled();
+    });
+  });
+
+  // error al cargarResultado (getResultadoById)
+  it('debe manejar error al cargarResultado (getResultadoById)', () => {
+    const nuevoActivatedRoute = {
+      snapshot: {
+        paramMap: convertToParamMap({ id: '1' })
+      },
+      paramMap: of(convertToParamMap({ id: '1' }))
+    };
+
+    TestBed.resetTestingModule();
+    return TestBed.configureTestingModule({
+      imports: [
+        ResultadoFormComponent,
+        ReactiveFormsModule
+      ],
+      providers: [
+        { provide: resultadoService, useValue: resultadoServiceSpy },
+        { provide: Router, useValue: routerSpy },
+        { provide: ActivatedRoute, useValue: nuevoActivatedRoute }
+      ]
+    }).compileComponents().then(() => {
+      fixture = TestBed.createComponent(ResultadoFormComponent);
+      component = fixture.componentInstance;
+
+      const consoleSpy = spyOn(console, 'error');
+   
+      resultadoServiceSpy.getResultadoById.and.returnValue(
+        throwError(() => 'Error al cargar' as any)
+      );
+
+      fixture.detectChanges(); // dispara ngOnInit y cargarResultado(1)
+
+      expect(resultadoServiceSpy.getResultadoById).toHaveBeenCalledWith(1);
+      expect(consoleSpy).toHaveBeenCalled(); // rama error del subscribe
     });
   });
 

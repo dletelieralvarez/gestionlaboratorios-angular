@@ -107,4 +107,23 @@ describe('PortalRegistroComponent', () => {
 
     expect(component.errorMsg).toBe('Ocurrió un problema al registrar. Intente nuevamente');
   });
+
+  //error inesperado con mensaje del backend (cubre la otra rama del ||)
+  it('registrar() error inesperado con mensaje del backend usa ese mensaje', () => {
+    usuariosServiceSpy.registrar.and.returnValue(
+      throwError(() => ({ error: { mensaje: 'Error desde backend' } }))
+    );
+
+    component.form.patchValue({
+      rut: '111',
+      nombres: 'A',
+      apellidos: 'B',
+      email: 'xxxx@test.com',
+      password: '123456'
+    });
+
+    component.registrar();
+
+    expect(component.errorMsg).toBe('Error desde backend');
+  });
 });

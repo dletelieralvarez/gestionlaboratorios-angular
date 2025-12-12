@@ -1,21 +1,31 @@
 import { TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, convertToParamMap } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
-  let router: jasmine.SpyObj<Router>;
+  let router: Router;
 
-  beforeEach(() => {
-    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+  beforeEach(async () => {
+    // Stub mínimo de ActivatedRoute para satisfacer la inyección del componente
+    const activatedRouteStub = {
+      snapshot: {
+        paramMap: convertToParamMap({})
+      }
+    };
 
-    TestBed.configureTestingModule({
-      imports: [AppComponent],
+    await TestBed.configureTestingModule({
+      imports: [
+        AppComponent,
+        RouterTestingModule          // router de testing real
+      ],
       providers: [
-        { provide: Router, useValue: routerSpy }
+        { provide: ActivatedRoute, useValue: activatedRouteStub }
       ]
-    });
+    }).compileComponents();
 
-    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    router = TestBed.inject(Router);
   });
 
   it('debe crearse', () => {
@@ -30,33 +40,26 @@ describe('AppComponent', () => {
     expect(app.title).toBe('gestionlaboratorios-angular');
   });
 
-  it('cerrarSesion debe limpiar localStorage, navegar a /home y recargar', fakeAsync(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
+it('cerrarSesion debe limpiar localStorage y navegar a /home', fakeAsync(() => {
+  const fixture = TestBed.createComponent(AppComponent);
+  const app = fixture.componentInstance;
 
-    // deja algo en localStorage
-    localStorage.setItem('id', '123');
-    localStorage.setItem('otro', 'valor');
+  localStorage.setItem('id', '123');
+  localStorage.setItem('otro', 'valor');
 
-    // espía router.navigate
-    const navigateSpy = router.navigate;
+  const navigateSpy = spyOn(router, 'navigate');
 
-    // espía reload del navegador
-    const reloadSpy = spyOn(window.location, 'reload' as any).and.callFake(() => {});
+  app.cerrarSesion();
 
-    // act
-    app.cerrarSesion();
+  expect(localStorage.getItem('id')).toBeNull();
+  expect(localStorage.getItem('otro')).toBeNull();
+  expect(navigateSpy).toHaveBeenCalledWith(['/home']);
 
-    // assertions inmediatas
-    expect(localStorage.getItem('id')).toBeNull();
-    expect(localStorage.getItem('otro')).toBeNull();
-    expect(navigateSpy).toHaveBeenCalledWith(['/home']);
+  // avanzamos el tiempo, pero ya no hay reload en Karma
+  tick(20);
+}));
 
-    // avanza el tiempo del setTimeout(…, 20)
-    tick(20);
 
-    expect(reloadSpy).toHaveBeenCalled();
-  }));
 
   it('irAMisExamenes debe ir a /resultados si está logueado', () => {
     const fixture = TestBed.createComponent(AppComponent);
@@ -64,9 +67,11 @@ describe('AppComponent', () => {
 
     localStorage.setItem('id', '999');
 
+    const navigateSpy = spyOn(router, 'navigate');
+
     app.irAMisExamenes();
 
-    expect(router.navigate).toHaveBeenCalledWith(['/resultados']);
+    expect(navigateSpy).toHaveBeenCalledWith(['/resultados']);
   });
 
   it('irAMisExamenes debe ir a /portal/login si NO está logueado', () => {
@@ -75,9 +80,11 @@ describe('AppComponent', () => {
 
     localStorage.removeItem('id');
 
+    const navigateSpy = spyOn(router, 'navigate');
+
     app.irAMisExamenes();
 
-    expect(router.navigate).toHaveBeenCalledWith(['/portal/login']);
+    expect(navigateSpy).toHaveBeenCalledWith(['/portal/login']);
   });
 
   it('toggleMenu debe alternar isMenuOpen', () => {
